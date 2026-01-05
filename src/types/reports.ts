@@ -1,3 +1,5 @@
+export type ReportStatus = "has-issues" | "late" | "normal";
+
 export interface WorkerReport {
   id: string;
   workerId: string;
@@ -7,6 +9,7 @@ export interface WorkerReport {
   submittedAt: string;
   summarySnippet: string;
   viewed: boolean;
+  status: ReportStatus;
   fullReport: {
     workCompleted: string;
     hoursWorked: number;
@@ -19,6 +22,7 @@ export interface WorkerReport {
 }
 
 export interface SiteSummary {
+  keyHighlights: string[];
   workCompleted: string[];
   equipmentUsed: string[];
   quantities: { item: string; total: string }[];
@@ -39,4 +43,5 @@ export interface DailySummaryMetrics {
   totalWorkers: number;
   totalHoursWorked: number;
   activeCrews: number;
+  missingReports: number;
 }

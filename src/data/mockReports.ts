@@ -15,8 +15,9 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Excavation Lead",
     crew: "Crew A",
     submittedAt: "4:32 PM",
-    summarySnippet: "Completed excavation of contaminated soil in Zone B-3. Removed approximately 45 cubic yards...",
+    summarySnippet: "Completed excavation of Zone B-3, removed 45 cubic yards of contaminated soil",
     viewed: true,
+    status: "has-issues",
     fullReport: {
       workCompleted: "Completed excavation of contaminated soil in Zone B-3. Removed approximately 45 cubic yards of soil to a depth of 6 feet. Exposed former underground storage tank foundation. Area prepared for confirmation sampling.",
       hoursWorked: 9.5,
@@ -37,8 +38,9 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Environmental Technician",
     crew: "Crew A",
     submittedAt: "4:45 PM",
-    summarySnippet: "Collected 12 confirmation soil samples from Zone B-3 excavation sidewalls and floor...",
+    summarySnippet: "Collected 12 confirmation soil samples from Zone B-3 excavation",
     viewed: false,
+    status: "normal",
     fullReport: {
       workCompleted: "Collected 12 confirmation soil samples from Zone B-3 excavation sidewalls and floor. Samples labeled and documented per project protocol. Prepared samples for overnight shipment to lab.",
       hoursWorked: 8,
@@ -48,7 +50,7 @@ export const mockWorkerReports: WorkerReport[] = [
         { item: "Sample Containers", quantity: "36 jars" },
       ],
       qualityControlNotes: "PID readings ranged from 0.2 to 8.4 ppm in excavation. Decontamination procedures followed between each sample location.",
-      issues: "None",
+      issues: "",
       observations: "Elevated PID readings (>5 ppm) observed primarily on the north sidewall. May indicate source direction.",
     },
   },
@@ -58,9 +60,10 @@ export const mockWorkerReports: WorkerReport[] = [
     workerName: "James Rivera",
     role: "Equipment Operator",
     crew: "Crew B",
-    submittedAt: "3:58 PM",
-    summarySnippet: "Operated vacuum truck for groundwater extraction in monitoring well network...",
+    submittedAt: "6:12 PM",
+    summarySnippet: "Operated vacuum truck for groundwater extraction in monitoring wells",
     viewed: false,
+    status: "late",
     fullReport: {
       workCompleted: "Operated vacuum truck for groundwater extraction in monitoring well network. Purged and sampled 6 monitoring wells (MW-1 through MW-6). Transported extracted groundwater to on-site treatment system.",
       hoursWorked: 8.5,
@@ -81,8 +84,9 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Safety Officer",
     crew: "Site-Wide",
     submittedAt: "5:15 PM",
-    summarySnippet: "Conducted daily site safety inspection and air monitoring. All personnel compliant with HASP...",
+    summarySnippet: "Conducted daily safety inspection and air monitoring across all zones",
     viewed: true,
+    status: "has-issues",
     fullReport: {
       workCompleted: "Conducted daily site safety inspection and air monitoring. Reviewed work permits for excavation and hot work activities. Held tailgate safety meeting with all crews.",
       hoursWorked: 8,
@@ -103,8 +107,9 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Treatment System Operator",
     crew: "Crew C",
     submittedAt: "4:20 PM",
-    summarySnippet: "Operated groundwater treatment system. Processed 2,400 gallons through GAC system...",
+    summarySnippet: "Operated groundwater treatment system, processed 2,400 gallons",
     viewed: false,
+    status: "has-issues",
     fullReport: {
       workCompleted: "Operated groundwater treatment system. Processed 2,400 gallons through GAC system. Performed daily system checks and documented influent/effluent parameters.",
       hoursWorked: 8,
@@ -125,8 +130,9 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Field Geologist",
     crew: "Crew A",
     submittedAt: "5:02 PM",
-    summarySnippet: "Logged soil borings SB-15 through SB-18 in proposed expansion area...",
+    summarySnippet: "Logged soil borings SB-15 through SB-18 in expansion area",
     viewed: false,
+    status: "has-issues",
     fullReport: {
       workCompleted: "Logged soil borings SB-15 through SB-18 in proposed expansion area. Documented lithology and collected samples for laboratory analysis. Updated site geological model.",
       hoursWorked: 9,
@@ -147,8 +153,9 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Laborer",
     crew: "Crew B",
     submittedAt: "3:45 PM",
-    summarySnippet: "Assisted with well sampling and site housekeeping. Managed IDW staging area...",
+    summarySnippet: "Managed IDW staging area, moved 8 drums to designated storage",
     viewed: true,
+    status: "normal",
     fullReport: {
       workCompleted: "Assisted with well sampling and site housekeeping. Managed investigation-derived waste (IDW) staging area. Moved empty drums to designated storage.",
       hoursWorked: 8,
@@ -158,13 +165,18 @@ export const mockWorkerReports: WorkerReport[] = [
         { item: "IDW Containers", quantity: "3 containers" },
       ],
       qualityControlNotes: "All drums properly labeled and staged on secondary containment.",
-      issues: "None",
+      issues: "",
       observations: "IDW staging area nearing capacity. Recommend scheduling waste disposal within 1 week.",
     },
   },
 ];
 
 export const mockSiteSummary: SiteSummary = {
+  keyHighlights: [
+    "Zone B-3 excavation completed — 45 cubic yards removed to 6 ft depth",
+    "4 issues flagged: GAC pressure rising, MW-4 low yield, near-miss incident, boring refusal",
+    "36 soil samples collected; 2,400 gallons groundwater processed",
+  ],
   workCompleted: [
     "Zone B-3 excavation completed to 6 feet depth, 45 cubic yards removed",
     "12 confirmation soil samples collected from excavation",
@@ -216,4 +228,5 @@ export const mockMetrics: DailySummaryMetrics = {
   totalWorkers: 9,
   totalHoursWorked: 59,
   activeCrews: 3,
+  missingReports: 2,
 };

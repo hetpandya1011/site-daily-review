@@ -35,6 +35,16 @@ const Index = () => {
     }
   };
 
+  const handleToday = () => {
+    setSelectedDate(new Date());
+  };
+
+  const handleYesterday = () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    setSelectedDate(yesterday);
+  };
+
   const handleSelectReport = (report: WorkerReport) => {
     setSelectedReport(report);
     setIsPanelOpen(true);
@@ -51,6 +61,8 @@ const Index = () => {
         selectedDate={selectedDate}
         onPreviousDay={handlePreviousDay}
         onNextDay={handleNextDay}
+        onToday={handleToday}
+        onYesterday={handleYesterday}
         metrics={mockMetrics}
       />
 
@@ -67,7 +79,10 @@ const Index = () => {
 
           {/* Right Column: Site Summary */}
           <div className="rounded-lg border border-border bg-card shadow-sm">
-            <SiteSummary summary={mockSiteSummary} />
+            <SiteSummary 
+              summary={mockSiteSummary} 
+              reportCount={mockWorkerReports.length}
+            />
           </div>
         </div>
       </main>
