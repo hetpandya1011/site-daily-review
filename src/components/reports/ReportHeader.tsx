@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, MapPin, Calendar, Users, Clock, HardHat } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Calendar, Users, Clock, HardHat, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JobInfo, DailySummaryMetrics } from "@/types/reports";
 
@@ -7,6 +7,8 @@ interface ReportHeaderProps {
   selectedDate: Date;
   onPreviousDay: () => void;
   onNextDay: () => void;
+  onToday: () => void;
+  onYesterday: () => void;
   metrics: DailySummaryMetrics;
 }
 
@@ -15,6 +17,8 @@ export function ReportHeader({
   selectedDate,
   onPreviousDay,
   onNextDay,
+  onToday,
+  onYesterday,
   metrics,
 }: ReportHeaderProps) {
   const formattedDate = selectedDate.toLocaleDateString("en-US", {
@@ -24,7 +28,14 @@ export function ReportHeader({
     day: "numeric",
   });
 
-  const isToday = new Date().toDateString() === selectedDate.toDateString();
+  const today = new Date();
+  const isToday = today.toDateString() === selectedDate.toDateString();
+  
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const isYesterday = yesterday.toDateString() === selectedDate.toDateString();
+
+  const isFutureDisabled = isToday;
 
   return (
     <header className="border-b border-border bg-card px-6 py-5">
@@ -38,7 +49,7 @@ export function ReportHeader({
       </div>
 
       {/* Date Navigation */}
-      <div className="mb-5 flex items-center gap-3">
+      <div className="mb-5 flex flex-wrap items-center gap-3">
         <Button
           variant="outline"
           size="icon"
@@ -62,11 +73,33 @@ export function ReportHeader({
           variant="outline"
           size="icon"
           onClick={onNextDay}
-          disabled={isToday}
+          disabled={isFutureDisabled}
           className="h-9 w-9"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
+
+        {/* Quick Actions */}
+        <div className="flex items-center gap-2 border-l border-border pl-3">
+          <Button
+            variant={isToday ? "secondary" : "ghost"}
+            size="sm"
+            onClick={onToday}
+            disabled={isToday}
+            className="h-8 text-xs"
+          >
+            Today
+          </Button>
+          <Button
+            variant={isYesterday ? "secondary" : "ghost"}
+            size="sm"
+            onClick={onYesterday}
+            disabled={isYesterday}
+            className="h-8 text-xs"
+          >
+            Yesterday
+          </Button>
+        </div>
       </div>
 
       {/* Metrics Cards */}
@@ -90,10 +123,11 @@ export function ReportHeader({
           sublabel="crews on site"
         />
         <MetricCard
-          icon={Calendar}
-          label="Completion"
-          value={`${Math.round((metrics.reportsSubmitted / metrics.totalWorkers) * 100)}%`}
-          sublabel="reports in"
+          icon={AlertCircle}
+          label="Missing Reports"
+          value={`${metrics.missingReports}`}
+          sublabel={metrics.missingReports === 1 ? "worker pending" : "workers pending"}
+          variant={metrics.missingReports > 0 ? "warning" : "default"}
         />
       </div>
     </header>
@@ -105,18 +139,21 @@ interface MetricCardProps {
   label: string;
   value: string;
   sublabel: string;
+  variant?: "default" | "warning";
 }
 
-function MetricCard({ icon: Icon, label, value, sublabel }: MetricCardProps) {
+function MetricCard({ icon: Icon, label, value, sublabel, variant = "default" }: MetricCardProps) {
+  const isWarning = variant === "warning";
+  
   return (
-    <div className="rounded-lg border border-border bg-background p-3">
-      <div className="flex items-center gap-2 text-muted-foreground">
+    <div className={`rounded-lg border p-3 ${isWarning ? "border-status-pending/30 bg-status-pending/5" : "border-border bg-background"}`}>
+      <div className={`flex items-center gap-2 ${isWarning ? "text-status-pending" : "text-muted-foreground"}`}>
         <Icon className="h-4 w-4" />
         <span className="text-xs font-medium uppercase tracking-wide">{label}</span>
       </div>
       <div className="mt-1">
-        <span className="text-xl font-semibold text-foreground">{value}</span>
-        <span className="ml-1 text-xs text-muted-foreground">{sublabel}</span>
+        <span className={`text-xl font-semibold ${isWarning ? "text-status-pending" : "text-foreground"}`}>{value}</span>
+        <span className={`ml-1 text-xs ${isWarning ? "text-status-pending/80" : "text-muted-foreground"}`}>{sublabel}</span>
       </div>
     </div>
   );

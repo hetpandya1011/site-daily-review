@@ -1,8 +1,10 @@
-import { X, Clock, User, Wrench, Package, ClipboardCheck, AlertTriangle, Eye } from "lucide-react";
+import { X, Clock, User, Wrench, Package, ClipboardCheck, AlertTriangle, Eye, ChevronDown } from "lucide-react";
 import { WorkerReport } from "@/types/reports";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 interface WorkerReportPanelProps {
   report: WorkerReport | null;
@@ -12,6 +14,8 @@ interface WorkerReportPanelProps {
 
 export function WorkerReportPanel({ report, isOpen, onClose }: WorkerReportPanelProps) {
   if (!report) return null;
+
+  const hasIssues = report.fullReport.issues && report.fullReport.issues.trim() !== "";
 
   return (
     <>
@@ -69,7 +73,7 @@ export function WorkerReportPanel({ report, isOpen, onClose }: WorkerReportPanel
           {/* Panel Content */}
           <div className="flex-1 overflow-y-auto p-5">
             <div className="space-y-5">
-              {/* Work Completed */}
+              {/* Work Completed - Always visible */}
               <ReportSection title="Work Completed">
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {report.fullReport.workCompleted}
@@ -78,8 +82,24 @@ export function WorkerReportPanel({ report, isOpen, onClose }: WorkerReportPanel
 
               <Separator />
 
-              {/* Equipment Used */}
-              <ReportSection title="Equipment Used" icon={Wrench}>
+              {/* Issues - Always visible when present */}
+              {hasIssues && (
+                <>
+                  <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4">
+                    <div className="mb-2 flex items-center gap-2">
+                      <AlertTriangle className="h-4 w-4 text-destructive" />
+                      <h3 className="text-sm font-semibold text-destructive">Issues Reported</h3>
+                    </div>
+                    <p className="text-sm leading-relaxed text-foreground">
+                      {report.fullReport.issues}
+                    </p>
+                  </div>
+                  <Separator />
+                </>
+              )}
+
+              {/* Equipment Used - Collapsible */}
+              <CollapsibleSection title="Equipment Used" icon={Wrench}>
                 <div className="flex flex-wrap gap-2">
                   {report.fullReport.equipmentUsed.map((item, index) => (
                     <span
@@ -90,12 +110,12 @@ export function WorkerReportPanel({ report, isOpen, onClose }: WorkerReportPanel
                     </span>
                   ))}
                 </div>
-              </ReportSection>
+              </CollapsibleSection>
 
               <Separator />
 
-              {/* Materials & Quantities */}
-              <ReportSection title="Materials & Quantities" icon={Package}>
+              {/* Materials & Quantities - Collapsible */}
+              <CollapsibleSection title="Materials & Quantities" icon={Package}>
                 <div className="rounded-lg border border-border bg-background">
                   <table className="w-full">
                     <tbody>
@@ -119,34 +139,25 @@ export function WorkerReportPanel({ report, isOpen, onClose }: WorkerReportPanel
                     </tbody>
                   </table>
                 </div>
-              </ReportSection>
+              </CollapsibleSection>
 
               <Separator />
 
-              {/* Quality Control Notes */}
-              <ReportSection title="Quality Control Notes" icon={ClipboardCheck}>
+              {/* Quality Control Notes - Collapsible */}
+              <CollapsibleSection title="Quality Control Notes" icon={ClipboardCheck}>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {report.fullReport.qualityControlNotes}
                 </p>
-              </ReportSection>
+              </CollapsibleSection>
 
               <Separator />
 
-              {/* Issues */}
-              <ReportSection title="Issues" icon={AlertTriangle} variant="warning">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  {report.fullReport.issues || "No issues reported"}
-                </p>
-              </ReportSection>
-
-              <Separator />
-
-              {/* Observations */}
-              <ReportSection title="Observations" icon={Eye}>
+              {/* Observations - Collapsible */}
+              <CollapsibleSection title="Observations" icon={Eye}>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {report.fullReport.observations || "No additional observations"}
                 </p>
-              </ReportSection>
+              </CollapsibleSection>
             </div>
           </div>
         </div>
@@ -157,26 +168,46 @@ export function WorkerReportPanel({ report, isOpen, onClose }: WorkerReportPanel
 
 interface ReportSectionProps {
   title: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  variant?: "default" | "warning";
   children: React.ReactNode;
 }
 
-function ReportSection({
-  title,
-  icon: Icon,
-  variant = "default",
-  children,
-}: ReportSectionProps) {
-  const iconColorClass = variant === "warning" ? "text-status-pending" : "text-muted-foreground";
-
+function ReportSection({ title, children }: ReportSectionProps) {
   return (
     <div>
-      <div className="mb-2 flex items-center gap-2">
-        {Icon && <Icon className={`h-4 w-4 ${iconColorClass}`} />}
+      <div className="mb-2">
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
       </div>
       {children}
     </div>
+  );
+}
+
+interface CollapsibleSectionProps {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}
+
+function CollapsibleSection({ title, icon: Icon, children }: CollapsibleSectionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger className="flex w-full items-center justify-between py-1 text-left">
+        <div className="flex items-center gap-2">
+          <Icon className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+        </div>
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 text-muted-foreground transition-transform",
+            isOpen && "rotate-180"
+          )}
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pt-3">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
