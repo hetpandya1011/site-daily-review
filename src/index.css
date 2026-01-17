@@ -119,6 +119,14 @@ All colors MUST be HSL.
   }
 
   .section-header {
-    @apply text-sm font-semibold uppercase tracking-wide text-muted-foreground;
+    @apply text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2;
+  }
+
+  .report-section {
+    @apply py-8;
+  }
+
+  .report-section-title {
+    @apply text-sm font-bold uppercase tracking-wider text-foreground/80 mb-4 pb-2 border-b border-border;
   }
 }

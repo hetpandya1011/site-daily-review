@@ -45,8 +45,8 @@ export function WorkerReportsTable({ reports }: WorkerReportsTableProps) {
       <div className="border-b border-border px-5 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Worker Daily Reports</h2>
-            <p className="mt-0.5 text-sm text-muted-foreground">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-foreground/80">Worker Daily Reports</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
               {submittedCount} submitted
               {missingCount > 0 && (
                 <span className="text-destructive font-medium"> • {missingCount} missing</span>
@@ -57,7 +57,7 @@ export function WorkerReportsTable({ reports }: WorkerReportsTableProps) {
       </div>
 
       {/* Reports List */}
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-border/70">
         {sortedReports.map((report) => (
           <WorkerReportRow key={report.id} report={report} />
         ))}
@@ -78,8 +78,8 @@ function WorkerReportRow({ report }: WorkerReportRowProps) {
     <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
       <CollapsibleTrigger 
         className={cn(
-          "w-full px-5 py-3 text-left transition-colors hover:bg-muted/50",
-          isMissing && "bg-destructive/5 hover:bg-destructive/10"
+          "w-full px-5 py-4 text-left transition-colors hover:bg-muted/50",
+          isMissing && "bg-destructive/8 hover:bg-destructive/12 border-l-2 border-l-destructive"
         )}
         disabled={isMissing}
       >
