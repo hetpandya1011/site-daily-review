@@ -1,9 +1,11 @@
 import { ChevronLeft, ChevronRight, MapPin, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { JobInfo } from "@/types/reports";
+import { JobInfo, ShiftInfo as ShiftInfoType } from "@/types/reports";
+import { ShiftInfo } from "./ShiftInfo";
 
 interface PageHeaderProps {
   job: JobInfo;
+  shift: ShiftInfoType;
   selectedDate: Date;
   onPreviousDay: () => void;
   onNextDay: () => void;
@@ -13,6 +15,7 @@ interface PageHeaderProps {
 
 export function PageHeader({
   job,
+  shift,
   selectedDate,
   onPreviousDay,
   onNextDay,
@@ -41,9 +44,13 @@ export function PageHeader({
         {/* Job Info */}
         <div>
           <h1 className="text-xl font-semibold text-foreground">{job.name}</h1>
-          <div className="mt-1 flex items-center gap-2 text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span className="text-sm">{job.address}</span>
+          <div className="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <MapPin className="h-4 w-4" />
+              <span className="text-sm">{job.address}</span>
+            </div>
+            <div className="hidden sm:block h-4 w-px bg-border" />
+            <ShiftInfo shift={shift} />
           </div>
         </div>
 

@@ -1,4 +1,14 @@
-import { WorkerReport, SiteSummary, JobInfo, DailySummaryMetrics } from "@/types/reports";
+import { 
+  WorkerReport, 
+  SiteSummary, 
+  JobInfo, 
+  DailySummaryMetrics,
+  WeatherSummary,
+  ShiftInfo,
+  SiteMaterials,
+  SiteEquipment,
+  PlannedActivity
+} from "@/types/reports";
 
 export const mockJob: JobInfo = {
   id: "job-001",
@@ -262,3 +272,43 @@ export const mockMetrics: DailySummaryMetrics = {
   activeCrews: 3,
   safetyIssues: 1,
 };
+
+export const mockWeather: WeatherSummary = {
+  tempLow: 42,
+  tempHigh: 58,
+  windSpeed: 12,
+  windDirection: "NW",
+  precipitation: "None",
+  cloudCover: "Partly Cloudy",
+};
+
+export const mockShift: ShiftInfo = {
+  shiftType: "Day",
+  startTime: "6:00 AM",
+  endTime: "4:30 PM",
+  workersAssigned: 9,
+};
+
+export const mockMaterials: SiteMaterials = {
+  bentoniteUsed: "1,200 lbs",
+  slurryBatches: 4,
+  backfillPlaced: "28 cubic yards",
+  loadsHauled: 12,
+};
+
+export const mockEquipment: SiteEquipment[] = [
+  { name: "CAT 320 Excavator", count: 2 },
+  { name: "Articulated Dump Truck", count: 3 },
+  { name: "Vacuum Truck", count: 1 },
+  { name: "Direct Push Drill Rig", count: 1 },
+  { name: "Water Truck", count: 1 },
+  { name: "GAC Treatment System", count: 1 },
+];
+
+export const mockPlannedActivities: PlannedActivity[] = [
+  { activity: "Continue Zone B-3 confirmation sampling" },
+  { activity: "Begin excavation of Zone C-1 (west section)" },
+  { activity: "Complete GAC media change-out" },
+  { activity: "Dispose of staged IDW drums" },
+  { activity: "Install 2 new monitoring wells (MW-7, MW-8)" },
+];
