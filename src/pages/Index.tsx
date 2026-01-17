@@ -2,12 +2,14 @@ import { useState } from "react";
 import { ReportHeader } from "@/components/reports/ReportHeader";
 import { PageHeader } from "@/components/reports/PageHeader";
 import { StatusDashboard } from "@/components/reports/StatusDashboard";
+import { IssuesRisksCard } from "@/components/reports/IssuesRisksCard";
 import { DailySiteSummary } from "@/components/reports/DailySiteSummary";
 import { WorkerReportsTable } from "@/components/reports/WorkerReportsTable";
 import { WeatherSummary } from "@/components/reports/WeatherSummary";
 import { SiteMaterialsSummary } from "@/components/reports/SiteMaterialsSummary";
 import { SiteEquipmentSummary } from "@/components/reports/SiteEquipmentSummary";
 import { PlannedActivities } from "@/components/reports/PlannedActivities";
+import { ReportFooter } from "@/components/reports/ReportFooter";
 import {
   mockJob,
   mockWorkerReports,
@@ -55,7 +57,7 @@ const Index = () => {
   const submittedReportsCount = mockWorkerReports.filter(r => r.status !== "missing").length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Report-style Header */}
       <ReportHeader
         job={mockJob}
@@ -74,22 +76,27 @@ const Index = () => {
         onYesterday={handleYesterday}
       />
 
-      <main className="p-6 space-y-8">
-        {/* 1. Weather + KPI Metrics Row - De-emphasized */}
+      <main className="flex-1 p-6 space-y-8">
+        {/* 1. Weather + KPI Metrics Row */}
         <section className="space-y-3">
           <WeatherSummary weather={mockWeather} />
           <StatusDashboard metrics={mockMetrics} />
         </section>
 
-        {/* 2. Daily Site Summary - Visually Dominant */}
-        <section className="pt-2">
+        {/* 2. Issues/Risks - Prioritized immediately after KPIs */}
+        <section>
+          <IssuesRisksCard issues={mockSiteSummary.issuesAndRisks} />
+        </section>
+
+        {/* 3. Daily Site Summary */}
+        <section>
           <DailySiteSummary 
             summary={mockSiteSummary} 
             reportCount={submittedReportsCount}
           />
         </section>
 
-        {/* 3. Site-Level Materials & Equipment */}
+        {/* 4. Site-Level Materials & Equipment */}
         <section>
           <h3 className="report-section-title">Site Resources</h3>
           <div className="grid gap-4 lg:grid-cols-2">
@@ -98,17 +105,20 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 4. Planned Activities - Next Shift */}
+        {/* 5. Planned Activities - Next Shift */}
         <section>
           <PlannedActivities activities={mockPlannedActivities} />
         </section>
 
-        {/* 5. Worker Daily Reports - Improved scan-ability */}
+        {/* 6. Worker Daily Reports */}
         <section className="pt-2">
           <h3 className="report-section-title">Individual Worker Reports</h3>
           <WorkerReportsTable reports={mockWorkerReports} />
         </section>
       </main>
+
+      {/* Report Footer */}
+      <ReportFooter timezone="America/New_York" />
     </div>
   );
 };

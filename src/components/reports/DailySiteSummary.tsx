@@ -1,5 +1,8 @@
-import { Sparkles, CheckCircle, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, CheckCircle, ChevronDown } from "lucide-react";
 import { SiteSummary } from "@/types/reports";
+import { cn } from "@/lib/utils";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface DailySiteSummaryProps {
   summary: SiteSummary;
@@ -7,7 +10,7 @@ interface DailySiteSummaryProps {
 }
 
 export function DailySiteSummary({ summary, reportCount }: DailySiteSummaryProps) {
-  const hasIssues = summary.issuesAndRisks.length > 0;
+  const [showDetails, setShowDetails] = useState(false);
 
   return (
     <div className="rounded-xl border-2 border-primary/20 bg-card shadow-md">
@@ -23,61 +26,50 @@ export function DailySiteSummary({ summary, reportCount }: DailySiteSummaryProps
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-6">
-        {/* Key Highlights */}
+      <div className="p-6 space-y-5">
+        {/* Key Highlights - Compact Pills */}
         <section>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            Key Highlights
-          </h3>
-          <ul className="space-y-2.5">
-            {summary.keyHighlights.map((item, index) => (
-              <li key={index} className="flex items-start gap-3 text-sm text-foreground font-medium">
-                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
-                {item}
-              </li>
+          <div className="flex flex-wrap gap-2">
+            {summary.keyHighlights.slice(0, 3).map((item, index) => (
+              <div
+                key={index}
+                className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1.5"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
+                <span className="text-sm font-medium text-foreground">{item}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
 
-        {/* Work Completed */}
-        <section>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-status-submitted" />
-            Work Completed
-          </h3>
-          <ul className="space-y-2">
-            {summary.workCompleted.slice(0, 5).map((item, index) => (
-              <li key={index} className="flex items-start gap-3 text-sm text-muted-foreground">
-                <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-muted-foreground/40" />
-                {item}
-              </li>
-            ))}
-            {summary.workCompleted.length > 5 && (
-              <li className="text-xs text-muted-foreground pl-4">
-                +{summary.workCompleted.length - 5} more items
-              </li>
-            )}
-          </ul>
-        </section>
+        {/* Collapsible Details */}
+        <Collapsible open={showDetails} onOpenChange={setShowDetails}>
+          <CollapsibleTrigger className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors font-medium">
+            <ChevronDown className={cn(
+              "h-4 w-4 transition-transform",
+              showDetails && "rotate-180"
+            )} />
+            {showDetails ? "Hide details" : "View details"}
+          </CollapsibleTrigger>
 
-        {/* Issues / Risks */}
-        {hasIssues && (
-          <section className="rounded-lg border border-destructive/30 bg-destructive/5 p-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-destructive mb-3 flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4" />
-              Issues / Risks ({summary.issuesAndRisks.length})
-            </h3>
-            <ul className="space-y-2">
-              {summary.issuesAndRisks.map((item, index) => (
-                <li key={index} className="flex items-start gap-3 text-sm text-foreground">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-destructive" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+          <CollapsibleContent className="mt-4 space-y-5">
+            {/* Work Completed */}
+            <section>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-status-submitted" />
+                Work Completed
+              </h3>
+              <ul className="space-y-2">
+                {summary.workCompleted.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3 text-sm text-muted-foreground">
+                    <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-muted-foreground/40" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     </div>
   );
