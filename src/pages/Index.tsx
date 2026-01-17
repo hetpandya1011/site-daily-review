@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ReportHeader } from "@/components/reports/ReportHeader";
 import { PageHeader } from "@/components/reports/PageHeader";
 import { StatusDashboard } from "@/components/reports/StatusDashboard";
 import { DailySiteSummary } from "@/components/reports/DailySiteSummary";
@@ -55,7 +56,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Page Header with Job Info, Shift Info, and Date Navigation */}
+      {/* Report-style Header */}
+      <ReportHeader
+        job={mockJob}
+        shift={mockShift}
+        reportDate={selectedDate}
+      />
+
+      {/* Date Navigation Bar */}
       <PageHeader
         job={mockJob}
         shift={mockShift}
@@ -66,38 +74,38 @@ const Index = () => {
         onYesterday={handleYesterday}
       />
 
-      <main className="p-6 space-y-6">
-        {/* 1. Weather Summary - Compact top row */}
-        <section>
+      <main className="p-6 space-y-8">
+        {/* 1. Weather + KPI Metrics Row - De-emphasized */}
+        <section className="space-y-3">
           <WeatherSummary weather={mockWeather} />
-        </section>
-
-        {/* 2. Status Dashboard - Key metrics */}
-        <section>
           <StatusDashboard metrics={mockMetrics} />
         </section>
 
-        {/* 3. Daily Site Summary - Prominent AI-generated summary */}
-        <section>
+        {/* 2. Daily Site Summary - Visually Dominant */}
+        <section className="pt-2">
           <DailySiteSummary 
             summary={mockSiteSummary} 
             reportCount={submittedReportsCount}
           />
         </section>
 
-        {/* 4. Site-Level Materials & Equipment */}
-        <section className="grid gap-6 lg:grid-cols-2">
-          <SiteMaterialsSummary materials={mockMaterials} />
-          <SiteEquipmentSummary equipment={mockEquipment} />
+        {/* 3. Site-Level Materials & Equipment */}
+        <section>
+          <h3 className="report-section-title">Site Resources</h3>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <SiteMaterialsSummary materials={mockMaterials} />
+            <SiteEquipmentSummary equipment={mockEquipment} />
+          </div>
         </section>
 
-        {/* 5. Planned Activities - Next Shift */}
+        {/* 4. Planned Activities - Next Shift */}
         <section>
           <PlannedActivities activities={mockPlannedActivities} />
         </section>
 
-        {/* 6. Worker Daily Reports - Compact expandable list */}
-        <section>
+        {/* 5. Worker Daily Reports - Improved scan-ability */}
+        <section className="pt-2">
+          <h3 className="report-section-title">Individual Worker Reports</h3>
           <WorkerReportsTable reports={mockWorkerReports} />
         </section>
       </main>
