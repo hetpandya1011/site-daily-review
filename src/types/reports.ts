@@ -48,3 +48,35 @@ export interface DailySummaryMetrics {
   activeCrews: number;
   safetyIssues: number;
 }
+
+export interface WeatherSummary {
+  tempLow: number;
+  tempHigh: number;
+  windSpeed: number;
+  windDirection: string;
+  precipitation: string;
+  cloudCover: string;
+}
+
+export interface ShiftInfo {
+  shiftType: "Day" | "Night";
+  startTime: string;
+  endTime: string;
+  workersAssigned: number;
+}
+
+export interface SiteMaterials {
+  bentoniteUsed: string;
+  slurryBatches: number;
+  backfillPlaced: string;
+  loadsHauled: number;
+}
+
+export interface SiteEquipment {
+  name: string;
+  count: number;
+}
+
+export interface PlannedActivity {
+  activity: string;
+}

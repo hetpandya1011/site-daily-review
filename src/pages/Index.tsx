@@ -3,11 +3,20 @@ import { PageHeader } from "@/components/reports/PageHeader";
 import { StatusDashboard } from "@/components/reports/StatusDashboard";
 import { DailySiteSummary } from "@/components/reports/DailySiteSummary";
 import { WorkerReportsTable } from "@/components/reports/WorkerReportsTable";
+import { WeatherSummary } from "@/components/reports/WeatherSummary";
+import { SiteMaterialsSummary } from "@/components/reports/SiteMaterialsSummary";
+import { SiteEquipmentSummary } from "@/components/reports/SiteEquipmentSummary";
+import { PlannedActivities } from "@/components/reports/PlannedActivities";
 import {
   mockJob,
   mockWorkerReports,
   mockSiteSummary,
   mockMetrics,
+  mockWeather,
+  mockShift,
+  mockMaterials,
+  mockEquipment,
+  mockPlannedActivities,
 } from "@/data/mockReports";
 
 const Index = () => {
@@ -46,9 +55,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Page Header with Job Info and Date Navigation */}
+      {/* Page Header with Job Info, Shift Info, and Date Navigation */}
       <PageHeader
         job={mockJob}
+        shift={mockShift}
         selectedDate={selectedDate}
         onPreviousDay={handlePreviousDay}
         onNextDay={handleNextDay}
@@ -57,12 +67,17 @@ const Index = () => {
       />
 
       <main className="p-6 space-y-6">
-        {/* 1. Status Dashboard - Top row metrics */}
+        {/* 1. Weather Summary - Compact top row */}
+        <section>
+          <WeatherSummary weather={mockWeather} />
+        </section>
+
+        {/* 2. Status Dashboard - Key metrics */}
         <section>
           <StatusDashboard metrics={mockMetrics} />
         </section>
 
-        {/* 2. Daily Site Summary - Prominent AI-generated summary */}
+        {/* 3. Daily Site Summary - Prominent AI-generated summary */}
         <section>
           <DailySiteSummary 
             summary={mockSiteSummary} 
@@ -70,7 +85,18 @@ const Index = () => {
           />
         </section>
 
-        {/* 3. Worker Daily Reports - Compact expandable list */}
+        {/* 4. Site-Level Materials & Equipment */}
+        <section className="grid gap-6 lg:grid-cols-2">
+          <SiteMaterialsSummary materials={mockMaterials} />
+          <SiteEquipmentSummary equipment={mockEquipment} />
+        </section>
+
+        {/* 5. Planned Activities - Next Shift */}
+        <section>
+          <PlannedActivities activities={mockPlannedActivities} />
+        </section>
+
+        {/* 6. Worker Daily Reports - Compact expandable list */}
         <section>
           <WorkerReportsTable reports={mockWorkerReports} />
         </section>
