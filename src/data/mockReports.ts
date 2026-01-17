@@ -8,6 +8,32 @@ export const mockJob: JobInfo = {
 };
 
 export const mockWorkerReports: WorkerReport[] = [
+  // Missing reports - should appear at top
+  {
+    id: "report-missing-001",
+    workerId: "worker-008",
+    workerName: "Michael Foster",
+    role: "Heavy Equipment Operator",
+    crew: "Crew B",
+    submittedAt: null,
+    summarySnippet: "",
+    status: "missing",
+    confidence: "low",
+    hasIssues: false,
+  },
+  {
+    id: "report-missing-002",
+    workerId: "worker-009",
+    workerName: "Patricia Wong",
+    role: "Site Supervisor",
+    crew: "Crew A",
+    submittedAt: null,
+    summarySnippet: "",
+    status: "missing",
+    confidence: "low",
+    hasIssues: false,
+  },
+  // Submitted reports
   {
     id: "report-001",
     workerId: "worker-001",
@@ -15,9 +41,10 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Excavation Lead",
     crew: "Crew A",
     submittedAt: "4:32 PM",
-    summarySnippet: "Completed excavation of Zone B-3, removed 45 cubic yards of contaminated soil",
-    viewed: true,
-    status: "has-issues",
+    summarySnippet: "Completed excavation of Zone B-3, removed 45 cubic yards",
+    status: "submitted",
+    confidence: "high",
+    hasIssues: true,
     fullReport: {
       workCompleted: "Completed excavation of contaminated soil in Zone B-3. Removed approximately 45 cubic yards of soil to a depth of 6 feet. Exposed former underground storage tank foundation. Area prepared for confirmation sampling.",
       hoursWorked: 9.5,
@@ -38,9 +65,10 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Environmental Technician",
     crew: "Crew A",
     submittedAt: "4:45 PM",
-    summarySnippet: "Collected 12 confirmation soil samples from Zone B-3 excavation",
-    viewed: false,
-    status: "normal",
+    summarySnippet: "Collected 12 confirmation soil samples from Zone B-3",
+    status: "submitted",
+    confidence: "high",
+    hasIssues: false,
     fullReport: {
       workCompleted: "Collected 12 confirmation soil samples from Zone B-3 excavation sidewalls and floor. Samples labeled and documented per project protocol. Prepared samples for overnight shipment to lab.",
       hoursWorked: 8,
@@ -61,9 +89,10 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Equipment Operator",
     crew: "Crew B",
     submittedAt: "6:12 PM",
-    summarySnippet: "Operated vacuum truck for groundwater extraction in monitoring wells",
-    viewed: false,
+    summarySnippet: "Operated vacuum truck for groundwater extraction",
     status: "late",
+    confidence: "medium",
+    hasIssues: true,
     fullReport: {
       workCompleted: "Operated vacuum truck for groundwater extraction in monitoring well network. Purged and sampled 6 monitoring wells (MW-1 through MW-6). Transported extracted groundwater to on-site treatment system.",
       hoursWorked: 8.5,
@@ -84,9 +113,10 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Safety Officer",
     crew: "Site-Wide",
     submittedAt: "5:15 PM",
-    summarySnippet: "Conducted daily safety inspection and air monitoring across all zones",
-    viewed: true,
-    status: "has-issues",
+    summarySnippet: "Conducted daily safety inspection and air monitoring",
+    status: "submitted",
+    confidence: "high",
+    hasIssues: true,
     fullReport: {
       workCompleted: "Conducted daily site safety inspection and air monitoring. Reviewed work permits for excavation and hot work activities. Held tailgate safety meeting with all crews.",
       hoursWorked: 8,
@@ -108,8 +138,9 @@ export const mockWorkerReports: WorkerReport[] = [
     crew: "Crew C",
     submittedAt: "4:20 PM",
     summarySnippet: "Operated groundwater treatment system, processed 2,400 gallons",
-    viewed: false,
-    status: "has-issues",
+    status: "submitted",
+    confidence: "high",
+    hasIssues: true,
     fullReport: {
       workCompleted: "Operated groundwater treatment system. Processed 2,400 gallons through GAC system. Performed daily system checks and documented influent/effluent parameters.",
       hoursWorked: 8,
@@ -131,8 +162,9 @@ export const mockWorkerReports: WorkerReport[] = [
     crew: "Crew A",
     submittedAt: "5:02 PM",
     summarySnippet: "Logged soil borings SB-15 through SB-18 in expansion area",
-    viewed: false,
-    status: "has-issues",
+    status: "submitted",
+    confidence: "medium",
+    hasIssues: true,
     fullReport: {
       workCompleted: "Logged soil borings SB-15 through SB-18 in proposed expansion area. Documented lithology and collected samples for laboratory analysis. Updated site geological model.",
       hoursWorked: 9,
@@ -153,9 +185,10 @@ export const mockWorkerReports: WorkerReport[] = [
     role: "Laborer",
     crew: "Crew B",
     submittedAt: "3:45 PM",
-    summarySnippet: "Managed IDW staging area, moved 8 drums to designated storage",
-    viewed: true,
-    status: "normal",
+    summarySnippet: "Managed IDW staging area, moved 8 drums to storage",
+    status: "submitted",
+    confidence: "high",
+    hasIssues: false,
     fullReport: {
       workCompleted: "Assisted with well sampling and site housekeeping. Managed investigation-derived waste (IDW) staging area. Moved empty drums to designated storage.",
       hoursWorked: 8,
@@ -174,7 +207,7 @@ export const mockWorkerReports: WorkerReport[] = [
 export const mockSiteSummary: SiteSummary = {
   keyHighlights: [
     "Zone B-3 excavation completed — 45 cubic yards removed to 6 ft depth",
-    "4 issues flagged: GAC pressure rising, MW-4 low yield, near-miss incident, boring refusal",
+    "4 issues flagged requiring attention (see Issues section)",
     "36 soil samples collected; 2,400 gallons groundwater processed",
   ],
   workCompleted: [
@@ -184,6 +217,13 @@ export const mockSiteSummary: SiteSummary = {
     "4 soil borings (SB-15 through SB-18) completed in expansion area",
     "2,400 gallons groundwater processed through treatment system",
     "Daily safety inspection and air monitoring completed",
+  ],
+  issuesAndRisks: [
+    "Near-miss incident: unsecured tool fell from excavator cab (addressed)",
+    "GAC pressure differential increasing — media change-out needed within 2 weeks",
+    "MW-4 showing reduced yield — may need redevelopment",
+    "SB-17 refusal at 22 ft (possible bedrock)",
+    "IDW staging area nearing capacity — disposal needed within 1 week",
   ],
   equipmentUsed: [
     "CAT 320 Excavator",
@@ -207,26 +247,18 @@ export const mockSiteSummary: SiteSummary = {
     "Air monitoring readings below action levels throughout day",
     "Effluent meets discharge criteria (benzene non-detect)",
   ],
-  issues: [
-    "Unexpected concrete debris encountered in Zone B-3 at 4-ft depth",
-    "Near-miss incident: unsecured tool fell from excavator cab (addressed)",
-    "MW-4 showing reduced yield - may need redevelopment",
-    "GAC pressure differential increasing - media change-out needed within 2 weeks",
-    "SB-17 refusal at 22 ft (possible bedrock)",
-  ],
   observations: [
     "Petroleum contamination indicators strongest on north sidewall of excavation",
     "Water clarity improving in MW-2 and MW-3",
     "Clay confining unit identified at 15-18 ft in expansion area",
-    "IDW staging area nearing capacity - disposal recommended within 1 week",
-    "Overall safety compliance excellent",
   ],
 };
 
 export const mockMetrics: DailySummaryMetrics = {
   reportsSubmitted: 7,
   totalWorkers: 9,
+  missingReports: 2,
   totalHoursWorked: 59,
   activeCrews: 3,
-  missingReports: 2,
+  safetyIssues: 1,
 };
