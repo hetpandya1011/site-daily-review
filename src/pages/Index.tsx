@@ -1,20 +1,17 @@
 import { useState } from "react";
-import { ReportHeader } from "@/components/reports/ReportHeader";
-import { WorkerReportsList } from "@/components/reports/WorkerReportsList";
-import { SiteSummary } from "@/components/reports/SiteSummary";
-import { WorkerReportPanel } from "@/components/reports/WorkerReportPanel";
+import { PageHeader } from "@/components/reports/PageHeader";
+import { StatusDashboard } from "@/components/reports/StatusDashboard";
+import { DailySiteSummary } from "@/components/reports/DailySiteSummary";
+import { WorkerReportsTable } from "@/components/reports/WorkerReportsTable";
 import {
   mockJob,
   mockWorkerReports,
   mockSiteSummary,
   mockMetrics,
 } from "@/data/mockReports";
-import { WorkerReport } from "@/types/reports";
 
 const Index = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedReport, setSelectedReport] = useState<WorkerReport | null>(null);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const handlePreviousDay = () => {
     setSelectedDate((prev) => {
@@ -45,54 +42,39 @@ const Index = () => {
     setSelectedDate(yesterday);
   };
 
-  const handleSelectReport = (report: WorkerReport) => {
-    setSelectedReport(report);
-    setIsPanelOpen(true);
-  };
-
-  const handleClosePanel = () => {
-    setIsPanelOpen(false);
-  };
+  const submittedReportsCount = mockWorkerReports.filter(r => r.status !== "missing").length;
 
   return (
     <div className="min-h-screen bg-background">
-      <ReportHeader
+      {/* Page Header with Job Info and Date Navigation */}
+      <PageHeader
         job={mockJob}
         selectedDate={selectedDate}
         onPreviousDay={handlePreviousDay}
         onNextDay={handleNextDay}
         onToday={handleToday}
         onYesterday={handleYesterday}
-        metrics={mockMetrics}
       />
 
-      <main className="p-6">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Left Column: Worker Reports */}
-          <div className="rounded-lg border border-border bg-card shadow-sm">
-            <WorkerReportsList
-              reports={mockWorkerReports}
-              selectedReportId={selectedReport?.id ?? null}
-              onSelectReport={handleSelectReport}
-            />
-          </div>
+      <main className="p-6 space-y-6">
+        {/* 1. Status Dashboard - Top row metrics */}
+        <section>
+          <StatusDashboard metrics={mockMetrics} />
+        </section>
 
-          {/* Right Column: Site Summary */}
-          <div className="rounded-lg border border-border bg-card shadow-sm">
-            <SiteSummary 
-              summary={mockSiteSummary} 
-              reportCount={mockWorkerReports.length}
-            />
-          </div>
-        </div>
+        {/* 2. Daily Site Summary - Prominent AI-generated summary */}
+        <section>
+          <DailySiteSummary 
+            summary={mockSiteSummary} 
+            reportCount={submittedReportsCount}
+          />
+        </section>
+
+        {/* 3. Worker Daily Reports - Compact expandable list */}
+        <section>
+          <WorkerReportsTable reports={mockWorkerReports} />
+        </section>
       </main>
-
-      {/* Slide-out Panel */}
-      <WorkerReportPanel
-        report={selectedReport}
-        isOpen={isPanelOpen}
-        onClose={handleClosePanel}
-      />
     </div>
   );
 };

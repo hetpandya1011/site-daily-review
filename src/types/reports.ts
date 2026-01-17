@@ -1,4 +1,5 @@
-export type ReportStatus = "has-issues" | "late" | "normal";
+export type ReportStatus = "submitted" | "missing" | "late";
+export type ConfidenceLevel = "high" | "medium" | "low";
 
 export interface WorkerReport {
   id: string;
@@ -6,11 +7,12 @@ export interface WorkerReport {
   workerName: string;
   role: string;
   crew: string;
-  submittedAt: string;
+  submittedAt: string | null;
   summarySnippet: string;
-  viewed: boolean;
   status: ReportStatus;
-  fullReport: {
+  confidence: ConfidenceLevel;
+  hasIssues: boolean;
+  fullReport?: {
     workCompleted: string;
     hoursWorked: number;
     equipmentUsed: string[];
@@ -24,10 +26,10 @@ export interface WorkerReport {
 export interface SiteSummary {
   keyHighlights: string[];
   workCompleted: string[];
+  issuesAndRisks: string[];
   equipmentUsed: string[];
   quantities: { item: string; total: string }[];
   qualityControlNotes: string[];
-  issues: string[];
   observations: string[];
 }
 
@@ -41,7 +43,8 @@ export interface JobInfo {
 export interface DailySummaryMetrics {
   reportsSubmitted: number;
   totalWorkers: number;
+  missingReports: number;
   totalHoursWorked: number;
   activeCrews: number;
-  missingReports: number;
+  safetyIssues: number;
 }
