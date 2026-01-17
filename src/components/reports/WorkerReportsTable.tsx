@@ -117,27 +117,12 @@ function WorkerReportRow({ report }: WorkerReportRowProps) {
             </div>
           </div>
 
-          {/* Compact Summary Stats - Right side */}
-          {!isMissing && report.fullReport && (
-            <div className="hidden lg:flex items-center gap-3 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1 px-2 py-1 rounded bg-muted/50">
-                <Clock className="h-3 w-3" />
-                <span className="font-medium">{report.fullReport.hoursWorked}h</span>
-              </div>
-              {report.hasIssues && (
-                <div className="flex items-center gap-1 px-2 py-1 rounded bg-destructive/10 text-destructive">
-                  <AlertTriangle className="h-3 w-3" />
-                  <span className="font-medium">1</span>
-                </div>
-              )}
-              <div className="flex items-center gap-1 px-2 py-1 rounded bg-muted/50">
-                <Package className="h-3 w-3" />
-                <span className="font-medium">{report.fullReport.materialsQuantities.length}</span>
-              </div>
-            </div>
+          {/* Activity Summary */}
+          {!isMissing && (
+            <p className="hidden md:block text-sm text-muted-foreground max-w-xs truncate">
+              {report.summarySnippet}
+            </p>
           )}
-
-          {/* Missing status */}
           {isMissing && (
             <p className="text-sm font-medium text-destructive">
               Report not submitted

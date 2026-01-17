@@ -23,17 +23,10 @@ export interface WorkerReport {
   };
 }
 
-export type IssueSeverity = "high" | "medium" | "low";
-
-export interface IssueItem {
-  text: string;
-  severity: IssueSeverity;
-}
-
 export interface SiteSummary {
   keyHighlights: string[];
   workCompleted: string[];
-  issuesAndRisks: IssueItem[];
+  issuesAndRisks: string[];
   equipmentUsed: string[];
   quantities: { item: string; total: string }[];
   qualityControlNotes: string[];

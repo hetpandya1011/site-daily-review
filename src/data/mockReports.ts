@@ -229,11 +229,11 @@ export const mockSiteSummary: SiteSummary = {
     "Daily safety inspection and air monitoring completed",
   ],
   issuesAndRisks: [
-    { text: "Near-miss incident: unsecured tool fell from excavator cab (addressed)", severity: "high" },
-    { text: "GAC pressure differential increasing — media change-out needed within 2 weeks", severity: "medium" },
-    { text: "MW-4 showing reduced yield — may need redevelopment", severity: "low" },
-    { text: "SB-17 refusal at 22 ft (possible bedrock)", severity: "low" },
-    { text: "IDW staging area nearing capacity — disposal needed within 1 week", severity: "medium" },
+    "Near-miss incident: unsecured tool fell from excavator cab (addressed)",
+    "GAC pressure differential increasing — media change-out needed within 2 weeks",
+    "MW-4 showing reduced yield — may need redevelopment",
+    "SB-17 refusal at 22 ft (possible bedrock)",
+    "IDW staging area nearing capacity — disposal needed within 1 week",
   ],
   equipmentUsed: [
     "CAT 320 Excavator",
